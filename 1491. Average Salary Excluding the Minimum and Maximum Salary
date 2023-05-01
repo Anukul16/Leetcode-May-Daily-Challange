@@ -1,0 +1,19 @@
+class Solution {
+    public double average(int[] salary) {
+        int min=Integer.MAX_VALUE,max=Integer.MIN_VALUE;
+        for(int x:salary){
+            min=Math.min(min,x);
+            max=Math.max(max,x);
+        }
+        // System.out.print(min+" "+max);
+        double sum=0;
+        for(int i=0;i<salary.length;i++){
+            if(salary[i]!=min && salary[i]!=max){
+                // System.out.print(salary[i]+" ");
+                sum+=salary[i];
+            }
+        }
+
+        return sum/(salary.length-2)*1.0;
+    }
+}
