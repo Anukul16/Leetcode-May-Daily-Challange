@@ -1,0 +1,58 @@
+class Solution {
+    public String predictPartyVictory(String s) {
+        Queue<Integer>qr=new LinkedList<>();
+        Queue<Integer>qd=new LinkedList<>();
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)=='R')qr.offer(i);
+            else qd.offer(i);
+        }
+        int n=s.length();
+        while(qr.size()>0 && qd.size()>0){
+            int rTop=qr.peek(),dTop=qd.peek();
+            qr.poll();qd.poll();
+            
+            
+            if(rTop<dTop){
+                qr.offer(rTop+n);
+                // System.out.println(rTop+" "+(rTop+n)+" ");
+            }
+            else {
+                qd.offer(dTop+n);
+                // System.out.print(dTop+" "+(dTop+n)+" ");
+            }
+        }
+        return qr.size()>0?"Radiant":"Dire";
+    }
+}
+/*
+
+
+At first i take two queue of integer type and then add the index of R and D
+
+Afterthat, i am checking while one of the queue will be empty then the other one will be my answer 
+ in loop what i am doing is that , i take the top element of both the queue at first and then remove both of them from the queue
+
+ Then i am checking if the R queue top value is less than the D queue top value
+ then i am adding the R to the last of the queue(not r but the index) (rTop+s.length())--> 
+    E.g-->  0 1 2 3 4 5
+            D R R D R D
+        In this example ,at first Queue[d]=[0,3,5]
+                                  Queue[r]=[1,2,4]
+                         after that,
+                                    d=[3,5,6]
+                                    r=[2,4]
+                                then,
+                                    d=[5,6]
+                                    r=[4,8]
+                                then,
+                                    d=[6]
+                                    r=[8,10]
+                                then,
+                                    d=[12]
+                                    r=[10]
+                                then,
+                                    d=[]
+                                    r=[16]
+                        here, r will be the answer
+
+*/
