@@ -1,0 +1,37 @@
+class Solution {
+    public int numSubseq(int[] nums, int target) {
+        Arrays.sort(nums);
+        int res=0;
+        int pre[]=new int[nums.length];
+        pre[0]=1;
+        for(int i=1;i<nums.length;i++){
+            pre[i]=pre[i-1]*2 % 1000000007;
+        }
+        int i=0,j=nums.length-1;
+        while(i<=j){
+            if(nums[i]+nums[j]<=target){
+                res=(res+pre[j-i]) % 1000000007;
+                i++;
+            }else{
+                j--;
+            }
+        }
+        return res;
+    }
+}
+/*
+
+The problem is very good.
+To solve the problem at first sort the array ,
+    so that we can find a bound ,for e.g. [3,5,6,7] here suppose my i=0,j=len-1
+    so here, nums[i]+nums[j]<=target is false so i will decrease the j,now i found a bound from where i can get all the subsequences.
+
+    For that we have to precompute the pow value that is why i compute the values ,
+    to compute that it is simple if 0 index=1, then 1 index= 2*(2 to the power 1-1) mean
+    if my len is n then it will be 2*(2 to the power n-1)
+
+    and j-i is the bound where i have to calculate the subsequences 
+
+
+
+*/
