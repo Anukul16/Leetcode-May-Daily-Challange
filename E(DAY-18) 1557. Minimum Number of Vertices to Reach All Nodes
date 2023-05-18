@@ -1,0 +1,19 @@
+class Solution {
+    public List<Integer> findSmallestSetOfVertices(int n, List<List<Integer>> edges) {
+       // Intuition:- We can clearly see that when and node has and incoming edge or indegree then we are not gonna add it to our answer. Our answer will be those nodes whosed does not have any incoming edge or indegree. Cause see first example here 0->1 & 0->2 , if we add 2 to our answer ? It does not make any sense to add it to our answer cause 2 has and indegree which is coming from 0. So add 0 to our answer definitely makes sense.
+
+       boolean hasIndegree[]=new boolean[n];
+       for(List<Integer>edge:edges){
+           int u=edge.get(0);
+           int v=edge.get(1);
+
+           // if u-->v then v has the indegree so we are just mark it as true cause it has
+           hasIndegree[v]=true;
+       }
+       List<Integer>ans=new ArrayList<>();
+       for(int i=0;i<n;i++){
+           if(hasIndegree[i]==false)ans.add(i);
+       } 
+       return ans;
+    }
+}
