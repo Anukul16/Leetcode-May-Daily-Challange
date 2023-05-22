@@ -1,3 +1,7 @@
+Approach 1: 
+    TC-->O(NLogN) SC-->(N)
+    
+    
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
         // see notes
@@ -19,3 +23,88 @@ class Solution {
         return res;
     }
 }
+
+
+
+
+
+Approach 2:
+      TC--> O(NlogK) SC-->O(N)
+      class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        // see notes
+        HashMap<Integer,Integer>map=new HashMap();
+        if(nums.length == k) return nums;
+        for(int i=0;i<nums.length;i++){
+            map.put(nums[i],map.getOrDefault(nums[i],0)+1);
+        }
+        
+        Queue<Integer>pq=new PriorityQueue((a,b)->map.get(a)-map.get(b));
+
+        // for(int x:map.keySet())pq.offer(x);
+        int res[]=new int[k];
+        for(int z:map.keySet()){
+            pq.add(z);
+            if(pq.size()>k)pq.poll();
+        }
+        int x=0;
+        while(!pq.isEmpty())res[x++]=pq.poll();
+        
+        //System.out.print(pq);
+        return res;
+    }
+}
+
+
+
+
+
+Approach 3:
+    TC-->O(N) SC-->O(N)
+    
+    
+    class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+
+        int n=nums.length;
+        HashMap<Integer,Integer>map=new HashMap<>();
+        for(int x:nums)map.put(x,map.getOrDefault(x,0)+1);
+        ArrayList<ArrayList<Integer>>bucket=new ArrayList<>();
+        for(int i=0;i<=n;i++)bucket.add(new ArrayList<>());
+
+        for(Map.Entry<Integer,Integer>entry:map.entrySet()){
+            int key=entry.getKey();
+            int val=entry.getValue();
+            bucket.get(val).add(key);
+        }
+        int ans[]=new int[k],j=0;
+        for(int i=bucket.size()-1;i>=0 && k>0;i--){
+            if(bucket.get(i).size()==0)continue;
+            for(int z:bucket.get(i)){
+                ans[j++]=z;
+                k--;
+                if(k==0)return ans;
+            }
+        }
+        return ans;
+
+
+        
+
+    }
+}
+/*
+
+Implemented bucket sort:
+-----------------------
+    At first find the frquency of each element 
+
+    Then create an arraylist of arraylist of size n+1, cause in the given array in some cases there will be an element whose frequency is as same as the array length so we have to create n+1 size bucket ( for 0 indexing)
+
+    Then in this bucket put all the key,and values ,here values or frequency wiil work like the index and the key is the element
+
+    After inserting, it is the time to find the answer so traverse from right to left so that we can get the element with  maximum frequncey as soon as possible and whenvevr the k will be 0 return the answer
+    
+
+
+*/
