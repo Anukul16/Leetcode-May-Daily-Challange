@@ -1,3 +1,112 @@
+class Pair{
+    String src;
+    double value;
+    Pair(String src,double value){
+        this.src=src;
+        this.value=value;
+    }
+}
+class Solution {
+    private void dfs(Map<String,ArrayList<Pair>>adj,String source,String desti,Set<String>visited,double product,double ans[]){
+        // If visited then no drama simply return
+        if(visited.contains(source)){
+            return;
+        }
+        // Mark it visited
+        visited.add(source);
+        // Find the ans
+        if(source.equals(desti)){
+            ans[0]=product;
+            return;
+        }
+        // Looping for adj's
+        for(Pair p:adj.getOrDefault(source,new ArrayList<>())){
+            String newSource=p.src;
+            double val=p.value;
+            dfs(adj,newSource,desti,visited,product*val,ans);
+        }
+    }
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        
+        int n=equations.size();
+        
+        Map<String,ArrayList<Pair>>adj=new HashMap<>();
+        // Making Adjacency List
+        for(int i=0;i<n;i++){
+            String u=equations.get(i).get(0);
+            String v=equations.get(i).get(1);
+            double val=values[i];
+
+            adj.putIfAbsent(u,new ArrayList<>());
+            adj.putIfAbsent(v,new ArrayList<>());
+
+            adj.get(u).add(new Pair(v,val)); // to handle a/c case
+            adj.get(v).add(new Pair(u,1/val)); // to handle c/a case
+        }
+        double[]res=new double[queries.size()];
+        for(int i=0;i<queries.size();i++){
+            String source=queries.get(i).get(0);
+            String desti=queries.get(i).get(1);
+            double[] ans={-1.0};
+            double product=1.0;
+
+            if(adj.containsKey(source)){
+                // for each query there will be unique visited set
+                Set<String>visited=new HashSet<>();
+                dfs(adj,source,desti,visited,product,ans);
+            }
+            res[i]=ans[0];
+        }
+
+    return res;
+    }
+}
+/*
+
+The question is straight forward
+    the queries are given and we have to found the ans for each query
+
+    suppose we are give a query [a,c]
+    so we check is there any path to reach a to c
+    for example one we see we can go a to b then b to c
+
+    that is all and the code is readable i dont think there will be any problem in future also i am attaching the dry run for this prolem in the notes section
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class Solution {
