@@ -1,0 +1,46 @@
+class Pair{
+    int first;
+    int second;
+    Pair(int first,int second){
+        this.first=first;
+        this.second=second;
+    }
+}
+class Solution {
+    public long maxScore(int[] nums1, int[] nums2, int k) {
+        int n=nums1.length;
+        Pair[]arr=new Pair[n];
+        for(int i=0;i<n;i++)arr[i]=new Pair(nums1[i],nums2[i]);
+        Arrays.sort(arr,(a,b)->{
+            return b.second-a.second;
+        });
+        PriorityQueue<Integer>pq=new PriorityQueue<>();
+        long currSum=0,maxSum=0;
+        for(int i=0;i<n;i++){
+            currSum+=arr[i].first;
+            pq.add(arr[i].first);
+            if(i>=k-1){
+                maxSum=Math.max(maxSum,currSum*arr[i].second);
+                currSum-=pq.poll();
+            }
+        }
+        return maxSum;
+    }
+}
+/*
+
+Problem says that take k elements from nums1 and nums2 (must be in same index that is given) find min of k elements from nums2 and add k elements from nums1 and then k elements from nums1 addition * min of k elements .....return the maximum 
+
+
+Intuiton:
+    Step-1:
+        Sort both the array according to second array in descending order
+    Step-2:
+        Take a minheap to store the nums1 elements so whenever we need the kSum at that time we will remove the min element from it
+    Step-3:
+        Basically add the nums1 elements or pair first elements upto k-1(0 based indexing) as well as insert all elements into the minheap
+        Whenever i will be equal to k-1 at that time find the maximum which is nothing but 
+            the [sum*arr[i].second] and after that do not forget to remove the min element from minheap so that when next iteration will be execute at that time {the first attaching with second in pair} will must add so we have to remove the min element
+
+
+*/
