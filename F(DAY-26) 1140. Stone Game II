@@ -1,0 +1,46 @@
+class Solution {
+    // Helper function to calculate the maximum number of stones the current player can get
+    public int helper(int[] piles, int[][] dp, int[] suffixSum, int i, int M) {
+        // If we have reached the end of the piles, return 0 (no more stones to pick)
+        if (i == piles.length)
+            return 0;
+
+        // If we can pick all remaining piles, return the sum of the suffix
+        if (i + 2 * M >= piles.length)
+            return suffixSum[i];
+
+        // If the result for the current state has already been calculated, return it
+        if (dp[i][M] != 0)
+            return dp[i][M];
+
+        int result = 0;
+        // Iterate through the number of stones we can pick (from 1 to 2*M)
+        for (int x = 1; x <= 2 * M; ++x) {
+            // Calculate the maximum number of stones the opponent can get in the next round
+            // Subtract it from the current player's score to get the current player's maximum score
+            result = Math.max(result, suffixSum[i] - helper(piles, dp, suffixSum, i + x, Math.max(M, x)));
+        }
+
+        // Store the calculated result in the dp table for future reference
+        dp[i][M] = result;
+        return result;
+    }
+
+    public int stoneGameII(int[] piles) {
+        // If there are no piles, the score is 0
+        if (piles.length == 0)
+            return 0;
+
+        // Create a dynamic programming table to store intermediate results
+        int[][] dp = new int[piles.length][piles.length];
+
+        // Calculate the suffix sum of the piles
+        int[] suffixSum = new int[piles.length];
+        suffixSum[suffixSum.length - 1] = piles[piles.length - 1];
+        for (int i = piles.length - 2; i >= 0; --i)
+            suffixSum[i] = piles[i] + suffixSum[i + 1];
+
+        // Call the helper function to get the maximum number of stones the first player can get
+        return helper(piles, dp, suffixSum, 0, 1);
+    }
+}
